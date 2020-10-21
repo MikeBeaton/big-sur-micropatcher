@@ -2,13 +2,13 @@
 # example:
 # https://www.rodsbooks.com/efi-programming/
 # (although it has diverged considerably since)
-# 
+#
 # Use the build-all.sh shell script, in the same directory as this Makefile,
 # to build for both x64 and ia32.
 
 ARCH            = $(shell uname -m | sed s,i[3456789]86,ia32,)
 
-TARGET          = setvars.efi setvars-verboseboot.efi
+TARGET          = nowt.efi
 
 EFIINC          = /usr/include/efi
 EFIINCS         = -I$(EFIINC) -I$(EFIINC)/$(ARCH) -I$(EFIINC)/protocol
@@ -24,7 +24,7 @@ EFI_CRT_OBJS    = $(EFILIB)/crt0-efi-$(ARCH).o
 EFI_LDS         = $(EFILIB)/elf_$(ARCH)_efi.lds
 
 CFLAGS          = $(EFIINCS) -fno-stack-protector -fpic \
-		  -fshort-wchar -mno-red-zone -Wall 
+		  -fshort-wchar -mno-red-zone -Wall
 ifeq ($(ARCH), x86_64)
     CFLAGS += -DEFI_FUNCTION_WRAPPER
 else
@@ -32,7 +32,7 @@ else
 endif
 
 LDFLAGS         = -nostdlib -znocombreloc -T $(EFI_LDS) -shared \
-		  -Bsymbolic -L $(EFILIB) -L $(LIB) $(EFI_CRT_OBJS) 
+		  -Bsymbolic -L $(EFILIB) -L $(LIB) $(EFI_CRT_OBJS)
 
 all: $(TARGET)
 
@@ -48,4 +48,4 @@ all: $(TARGET)
 .PHONY: clobber
 
 clobber:
-	rm -rf *.o *.so *.efi EFI EFI-verboseboot
+	rm -rf *.o *.so *.efi EFI
